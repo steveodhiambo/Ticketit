@@ -5,6 +5,7 @@ import (
 	"net/http"
 )
 
+// Handler that takes any dependencies
 type Handler struct {
 }
 
