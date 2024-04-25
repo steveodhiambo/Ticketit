@@ -28,7 +28,7 @@ func main() {
 	//Initialize and conect to db
 	initStorage(db)
 
-	server := api.NewServer(":8080", nil)
+	server := api.NewServer(":8080", db)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
