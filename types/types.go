@@ -11,7 +11,7 @@ type UserStore interface {
 
 type User struct {
 	ID        int       `json:"id"`
-	Username  string    `json:"username"`
+	Username  string    `json:"user_name"`
 	FirstName string    `json:"first"`
 	LastName  string    `json:"last_name"`
 	Email     string    `json:"email"`
@@ -20,9 +20,9 @@ type User struct {
 }
 
 type RegisterUserPayload struct {
-	Username  string `json:"username"`
-	FirstName string `json:"firstname"`
-	LastName  string `json:"lastname"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
+	Username  string `json:"user_name" validate:"required"`
+	FirstName string `json:"first_name" validate:"required"`
+	LastName  string `json:"last_name" validate:"required"`
+	Email     string `json:"email" validate:"required,email"`
+	Password  string `json:"password" validate:"required,min=8,max=32"`
 }
