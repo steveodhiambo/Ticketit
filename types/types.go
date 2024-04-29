@@ -12,7 +12,7 @@ type UserStore interface {
 type User struct {
 	ID        int       `json:"id"`
 	Username  string    `json:"user_name"`
-	FirstName string    `json:"first"`
+	FirstName string    `json:"first_name"`
 	LastName  string    `json:"last_name"`
 	Email     string    `json:"email"`
 	Password  string    `json:"-"`

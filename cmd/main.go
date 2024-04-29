@@ -36,6 +36,7 @@ func main() {
 
 // Start the database Connection
 func initStorage(db *sql.DB) {
+	//db.SetMaxOpenConns()
 	err := db.Ping()
 	if err != nil {
 		log.Fatal(err)
