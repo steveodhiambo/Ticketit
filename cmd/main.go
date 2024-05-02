@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 	"time"
 
@@ -12,8 +13,8 @@ import (
 )
 
 func main() {
-	// Intialize database
-	db, err := db.NewMySQLStorage(mysql.Config{
+
+	cfg := mysql.Config{
 		User:                 config.Envs.DBUser,
 		Passwd:               config.Envs.DBPassword,
 		Addr:                 config.Envs.DBAddress,
@@ -22,7 +23,10 @@ func main() {
 		AllowNativePasswords: true,
 		ParseTime:            true,
 		Timeout:              time.Minute * 5, // Maximun time to wait for database connection
-	})
+	}
+
+	// Intialize database
+	db, err := db.NewMySQLStorage(cfg)
 
 	if err != nil {
 		log.Fatal(err)
@@ -31,7 +35,7 @@ func main() {
 	//Initialize and conect to db
 	initStorage(db)
 
-	server := api.NewServer(":8080", db)
+	server := api.NewServer(fmt.Sprintf(":%s", config.Envs.Port), db)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
