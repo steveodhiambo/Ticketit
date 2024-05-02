@@ -2,11 +2,13 @@ package main
 
 import (
 	"database/sql"
+	"log"
+	"time"
+
 	"github.com/go-sql-driver/mysql"
 	"github.com/steveodhiambo/ticket-it/cmd/api"
 	"github.com/steveodhiambo/ticket-it/config"
 	db "github.com/steveodhiambo/ticket-it/db"
-	"log"
 )
 
 func main() {
@@ -19,6 +21,7 @@ func main() {
 		Net:                  "tcp",
 		AllowNativePasswords: true,
 		ParseTime:            true,
+		Timeout:              time.Minute * 5, // Maximun time to wait for database connection
 	})
 
 	if err != nil {
