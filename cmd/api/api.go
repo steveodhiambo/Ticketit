@@ -2,10 +2,12 @@ package api
 
 import (
 	"database/sql"
-	"github.com/gorilla/mux"
-	"github.com/steveodhiambo/ticket-it/service/user"
 	"log"
 	"net/http"
+	"time"
+
+	"github.com/gorilla/mux"
+	"github.com/steveodhiambo/ticket-it/service/user"
 )
 
 type Server struct {
@@ -29,6 +31,14 @@ func (s *Server) Run() error {
 	userHandler := user.NewHandler(userStore)
 	userHandler.RegisterRoutes(subrouter)
 
+	srv := &http.Server{
+		Addr:         s.addr,
+		Handler:      router,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 30 * time.Second,
+	}
+
 	log.Println("Listening on:", s.addr)
-	return http.ListenAndServe(s.addr, router)
+	return srv.ListenAndServe()
 }
