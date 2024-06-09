@@ -9,14 +9,15 @@ import (
 )
 
 type Config struct {
-	PublicHost             string
-	Port                   string
-	DBUser                 string
-	DBPassword             string
-	DBAddress              string
-	DBName                 string
-	JWTSecret              string
-	JWTExpirationInSeconds int64
+	PublicHost                      string
+	Port                            string
+	DBUser                          string
+	DBPassword                      string
+	DBAddress                       string
+	DBName                          string
+	JWTSecret                       string
+	JWTExpirationInSeconds          int64
+	RefreshTokenExpirationInSeconds int64
 }
 
 // Envs is a singleton that holds initial configs
@@ -25,14 +26,15 @@ var Envs = initConfig()
 func initConfig() Config {
 	godotenv.Load(".env")
 	return Config{
-		PublicHost:             getEnv("PUBLIC_HOST", "http://localhost"),
-		Port:                   getEnv("PORT", "8080"),
-		DBUser:                 getEnv("DB_USER", "root"),
-		DBPassword:             getEnv("DB_PASSWORD", "password"),
-		DBAddress:              fmt.Sprintf("%s:%s", getEnv("DB_HOST", "127.0.0.1"), getEnv("DB_PORT", "3306")),
-		DBName:                 getEnv("DB_NAME", ""),
-		JWTSecret:              getEnv("JWT_SECRET", "not-secret-anymore"),
-		JWTExpirationInSeconds: getEnvAsInt("JWT_EXP", 3600*24*7),
+		PublicHost:                      getEnv("PUBLIC_HOST", "http://localhost"),
+		Port:                            getEnv("PORT", "8080"),
+		DBUser:                          getEnv("DB_USER", "root"),
+		DBPassword:                      getEnv("DB_PASSWORD", "password"),
+		DBAddress:                       fmt.Sprintf("%s:%s", getEnv("DB_HOST", "127.0.0.1"), getEnv("DB_PORT", "3306")),
+		DBName:                          getEnv("DB_NAME", ""),
+		JWTSecret:                       getEnv("JWT_SECRET", "not-secret-anymore"),
+		JWTExpirationInSeconds:          getEnvAsInt("JWT_EXP", 15*60),
+		RefreshTokenExpirationInSeconds: getEnvAsInt("JWT_REFRESH_EXP", 3600*24*7),
 	}
 }
 

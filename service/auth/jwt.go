@@ -9,11 +9,11 @@ import (
 )
 
 func CreateJWT(secret []byte, userID int) (string, error) {
-	expiration := time.Second * time.Duration(config.Envs.JWTExpirationInSeconds)
+	accessTokenExpiration := time.Second * time.Duration(config.Envs.JWTExpirationInSeconds)
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userID":    strconv.Itoa(userID),
-		"expiredAt": time.Now().Add(expiration).Unix(),
+		"expiredAt": time.Now().Add(accessTokenExpiration).Unix(),
 	})
 
 	tokenString, err := token.SignedString(secret)
