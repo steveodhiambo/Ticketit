@@ -5,9 +5,11 @@ WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
 
-COPY . ./
+COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /api ./cmd/main.go
+COPY .env .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o bin/TicketIt cmd/main.go
 
 # Run the tests in the container
 FROM build-stage AS run-test-stage
@@ -17,8 +19,9 @@ RUN go test -v ./...
 FROM scratch AS build-release-stage
 WORKDIR /
 
-COPY --from=build-stage /api /api
+COPY --from=build-stage /app/bin/TicketIt .
+COPY --from=build-stage /app/.env .
 
 EXPOSE 4000
 
-ENTRYPOINT ["/api"]
+ENTRYPOINT ["./TicketIt"]
