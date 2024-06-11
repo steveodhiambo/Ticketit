@@ -3,30 +3,32 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"log"
-	"time"
-
-	"github.com/go-sql-driver/mysql"
+	_ "github.com/lib/pq"
 	"github.com/steveodhiambo/ticket-it/cmd/api"
 	"github.com/steveodhiambo/ticket-it/config"
 	db "github.com/steveodhiambo/ticket-it/db"
+	"log"
+)
+
+const (
+	host     = "postgres"
+	port     = 5432
+	user     = "ticket_it"
+	password = "password123"
+	dbname   = "ticket_it"
 )
 
 func main() {
 
-	cfg := mysql.Config{
-		User:                 config.Envs.DBUser,
-		Passwd:               config.Envs.DBPassword,
-		Addr:                 config.Envs.DBAddress,
-		DBName:               config.Envs.DBName,
-		Net:                  "tcp",
-		AllowNativePasswords: true,
-		ParseTime:            true,
-		Timeout:              time.Minute * 5, // Maximun time to wait for database connection
-	}
+	cfg := fmt.Sprintf("user=%s password=%s host=%s port=%d dbname=%s sslmode=disable",
+		config.Envs.DBUser,
+		config.Envs.DBPassword,
+		config.Envs.DBHost,
+		5432,
+		config.Envs.DBName)
 
 	// Intialize database
-	db, err := db.NewMySQLStorage(cfg)
+	db, err := db.NewPostgreSQLStorage(cfg)
 
 	if err != nil {
 		log.Fatal(err)
